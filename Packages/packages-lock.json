@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.gilzoide.update-manager": {
+      "version": "https://github.com/gilzoide/unity-update-manager.git#1.5.3",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1ef1dc9d8dc12061da51bb3fd9178fc869961387"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
       "depth": 0,
@@ -203,6 +210,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "jp.hadashikick.vcontainer": {
+      "version": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.17.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "177dbda557fd652ce7f5d1647a3621653e094373"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
