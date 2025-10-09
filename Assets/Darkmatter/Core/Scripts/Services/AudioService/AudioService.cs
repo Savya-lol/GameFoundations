@@ -8,7 +8,7 @@ using Darkmatter.Core.Services.AudioService.Interfaces;
 
 namespace Darkmatter.Core.Services.AudioService
 {
-    public class AudioService : IAudioService
+    public class AudioService : MonoBehaviour,IAudioService
     {
         [SerializeField] private AudioSource _masterSource;
         [SerializeField] private AudioSource _musicSource;
