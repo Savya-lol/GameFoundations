@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Darkmatter.Core.Extensions
+namespace Darkmatter.Core
 {
     public static class StringExtensions 
     {

@@ -61,6 +61,7 @@
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/AddressablesService/AddressablesLoaderService.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Utils/EncryptionUtils.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/CommandFactory/Interfaces/ICommandFactory.cs" />
+    <Compile Include="Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/StateMachines/StateMachine.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/LoggingService/DarkmatterLogger.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/SceneService/Interfaces/ISceneLoaderService.cs" />
