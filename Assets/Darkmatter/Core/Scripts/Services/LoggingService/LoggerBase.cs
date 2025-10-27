@@ -7,7 +7,7 @@ namespace Darkmatter.Core.Services.LoggingService
     {
         protected LoggerBase()
         {
-
+            LogService.InjectLogger(this);
         }
         public abstract void Log(string message);
         public abstract void LogWarning(string message);

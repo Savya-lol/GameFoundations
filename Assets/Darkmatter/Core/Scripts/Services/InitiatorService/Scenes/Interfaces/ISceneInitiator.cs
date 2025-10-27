@@ -1,10 +1,11 @@
 using System.Threading;
 using Darkmatter.Core.Services.SceneService;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace Darkmatter.Core.Services.InitiatorService.Scenes
 {
-    public interface ISceneInitiator
+    public interface ISceneInitiator : IInitializable
     {
         SceneType SceneType { get; }
         Awaitable LoadEntryPoint(IInitiatorEnterData enterDataObject, CancellationTokenSource cancellationTokenSource);
