@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Darkmatter.Core.Services.StateMachines.Interfaces
 {
-    public interface IBaseStateMachine
+    public interface IStateMachine
     {
         public IState Current { get; }
         void Push(IState state);
