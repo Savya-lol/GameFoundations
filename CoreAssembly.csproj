@@ -54,8 +54,10 @@
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/AddressablesService/Interfaces/IAddressablesLoaderService.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/AudioService/Enums/AudioChannelType.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/InitiatorService/Interfaces/IInitiator.cs" />
+    <Compile Include="Assets/Darkmatter/Core/Scripts/Abilities/BaseAbilitySystem.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/AudioService/Enums/AudioPlayMode.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/AudioService/Datas/AudioData.cs" />
+    <Compile Include="Assets/Darkmatter/Core/Scripts/Abilities/Interfaces/IAbility.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Extensions/StringExtensions.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/LoggingService/LoggerBase.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/AddressablesService/AddressablesLoaderService.cs" />
