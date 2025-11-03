@@ -20,10 +20,5 @@ namespace Darkmatter.Core.Abilities
                     ability.Tick();
             }
         }
-
-        public void Tick(float deltaTime)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
