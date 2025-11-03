@@ -3,19 +3,22 @@ using Darkmatter.Core.Services.StateMachines.Interfaces;
 
 namespace Darkmatter.Core.Services.StateMachines
 {
-    public class BaseStateMachine
+    public abstract class BaseStateMachine
     {
         private readonly Stack<IState> _stack = new();
         public IState Current => _stack.Count > 0 ? _stack.Peek() : null;
 
         public void Push(IState s)
         {
+            if (s == null) return;
+
             Current?.OnExit();
             _stack.Push(s);
             s.OnEnter();
         }
         public void Replace(IState s)
         {
+            if (s == null) return;
             if (Current != null)
             {
                 Current.OnExit();
@@ -29,7 +32,10 @@ namespace Darkmatter.Core.Services.StateMachines
             if (Current == null) return;
             Current.OnExit();
             _stack.Pop();
-            _stack.Peek()?.OnEnter();
+            if (_stack.Count > 0)
+            {
+                _stack.Peek().OnEnter();
+            }
         }
         public void Tick()
         {
