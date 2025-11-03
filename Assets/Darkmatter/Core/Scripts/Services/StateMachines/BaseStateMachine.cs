@@ -3,7 +3,7 @@ using Darkmatter.Core.Services.StateMachines.Interfaces;
 
 namespace Darkmatter.Core.Services.StateMachines
 {
-    public sealed class StateMachine
+    public class BaseStateMachine
     {
         private readonly Stack<IState> _stack = new();
         public IState Current => _stack.Count > 0 ? _stack.Peek() : null;
