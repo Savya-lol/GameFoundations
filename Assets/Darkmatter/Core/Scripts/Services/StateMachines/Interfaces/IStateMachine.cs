@@ -3,7 +3,7 @@ using VContainer.Unity;
 
 namespace Darkmatter.Core.Services.StateMachines.Interfaces
 {
-    public interface IStateMachine : ITickable
+    public interface IStateMachine
     {
         public IState Current { get; }
         void Push(IState state);

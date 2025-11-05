@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Darkmatter.Core.Services.StateMachines.Interfaces;
 
 namespace Darkmatter.Core.Services.StateMachines
 {
-    public abstract class StateMachine : IStateMachine
+    public abstract class BaseStateMachine : IStateMachine
     {
         private readonly Stack<IState> _stack = new();
         public IState Current => _stack.Count > 0 ? _stack.Peek() : null;
@@ -36,10 +37,6 @@ namespace Darkmatter.Core.Services.StateMachines
             {
                 _stack.Peek().OnEnter();
             }
-        }
-        public void Tick()
-        {
-            Current?.Tick();
         }
     }
 }

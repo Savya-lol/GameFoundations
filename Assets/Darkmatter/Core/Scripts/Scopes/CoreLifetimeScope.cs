@@ -16,7 +16,7 @@ namespace Darkmatter.Core.Scopes
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponent(_audioService).AsImplementedInterfaces().AsSelf();
-            builder.Register<DarkmatterLogger>(Lifetime.Singleton).AsSelf();
+            builder.Register<DarkmatterLogger>(Lifetime.Scoped).AsSelf();
             builder.Register<GameInputs>(Lifetime.Singleton).AsSelf();
             builder.Register<ISceneLoaderService, SceneLoaderService>(Lifetime.Singleton);
             builder.Register<ISceneInitiatorsService, SceneInitiatorsService>(Lifetime.Singleton);

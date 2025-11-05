@@ -48,6 +48,7 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/6000.2.6f2/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/Darkmatter/Core/Scripts/Services/StateMachines/BaseStateMachine.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/LoggingService/Interfaces/ILogger.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/InitiatorService/Scenes/SceneInitiatorsService.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/InitiatorService/Scenes/Interfaces/ISceneInitiatorsService.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="Assets/Darkmatter/Core/Scripts/Utils/EncryptionUtils.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/CommandFactory/Interfaces/ICommandFactory.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs" />
-    <Compile Include="Assets/Darkmatter/Core/Scripts/Services/StateMachines/StateMachine.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/LoggingService/DarkmatterLogger.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Services/SceneService/Interfaces/ISceneLoaderService.cs" />
     <Compile Include="Assets/Darkmatter/Core/Scripts/Audio/CoreAudioClipsSO.cs" />
