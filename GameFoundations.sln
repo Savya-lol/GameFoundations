@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.DOTween", "UniTask.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePluginsAssembly", "CorePluginsAssembly.csproj", "{2CA4F61A-AE58-12F7-1DE7-33176778F330}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkmatterEditorAssembly", "DarkmatterEditorAssembly.csproj", "{6A2C934C-C53C-B2B6-B109-7C4BDE252166}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{2CA4F61A-AE58-12F7-1DE7-33176778F330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA4F61A-AE58-12F7-1DE7-33176778F330}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA4F61A-AE58-12F7-1DE7-33176778F330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A2C934C-C53C-B2B6-B109-7C4BDE252166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A2C934C-C53C-B2B6-B109-7C4BDE252166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A2C934C-C53C-B2B6-B109-7C4BDE252166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A2C934C-C53C-B2B6-B109-7C4BDE252166}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
