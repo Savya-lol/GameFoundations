@@ -1,12 +1,18 @@
-using Cysharp.Threading.Tasks;
+using System;
 
 namespace Darkmatter.Core.Events
 {
     public interface IEventBus
     {
-        void Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : IEvent;
-        UniTask PublishAsync<TEvent>(TEvent domainEvent) where TEvent : IEvent;
-        void Publish<TEvent>(TEvent domainEvent) where TEvent : IEvent;
-        void Clear();
+        /// <summary>
+        /// Publish an event of type T to all subscribers.
+        /// </summary>
+        void Publish<T>(T evt);
+
+        /// <summary>
+        /// Subscribe to an event of type T.
+        /// Returns IDisposable – calling Dispose() unsubscribes.
+        /// </summary>
+        IDisposable Subscribe<T>(Action<T> handler);
     }
 }

@@ -7,57 +7,45 @@ namespace Darkmatter.Core.Events
 {
     public class EventBus : IEventBus
     {
-        private readonly Dictionary<Type, List<Func<IEvent, UniTask>>> _handlers =
-            new Dictionary<Type, List<Func<IEvent, UniTask>>>();
+        private readonly Dictionary<Type, List<Delegate>> _map = new();
 
-        /// <summary>
-        /// Subscribes an event handler to a specific event type.
-        /// </summary>
-        public void Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : IEvent
+        public void Publish<T>(T evt)
         {
-            var eventType = typeof(TEvent);
-
-            if (!_handlers.ContainsKey(eventType))
-                _handlers[eventType] = new List<Func<IEvent, UniTask>>();
-
-            _handlers[eventType].Add(e => handler.HandleAsync((TEvent)e));
-        }
-
-        /// <summary>
-        /// Publishes an event asynchronously to all registered handlers.
-        /// </summary>
-        public async UniTask PublishAsync<TEvent>(TEvent domainEvent) where TEvent : IEvent
-        {
-            var eventType = typeof(TEvent);
-
-            if (!_handlers.TryGetValue(eventType, out var handlers)) return;
-
-            foreach (var handler in handlers)
+            if (_map.TryGetValue(typeof(T), out var list))
             {
-                await handler(domainEvent);
+                // Copy to avoid modification during iteration
+                var snapshot = list.ToArray();
+                for (int i = 0; i < snapshot.Length; i++)
+                    ((Action<T>)snapshot[i])?.Invoke(evt);
             }
         }
 
-        /// <summary>
-        /// Publishes an event synchronously (fire-and-forget style).
-        /// </summary>
-        public void Publish<TEvent>(TEvent domainEvent) where TEvent : IEvent
+        public IDisposable Subscribe<T>(Action<T> handler)
         {
-            var eventType = typeof(TEvent);
+            var t = typeof(T);
+            if (!_map.TryGetValue(t, out var list))
+                _map[t] = list = new List<Delegate>();
 
-            if (!_handlers.TryGetValue(eventType, out var handlers)) return;
-
-            foreach (var handler in handlers)
-            {
-                // Fire-and-forget UniTask for synchronous publish
-                handler(domainEvent).Forget();
-            }
+            list.Add(handler);
+            return new Unsub<T>(list, handler);
         }
 
-        /// <summary>
-        /// Clears all registered handlers — useful for testing or resetting scopes.
-        /// </summary>
-        public void Clear() => _handlers.Clear();
+        private sealed class Unsub<T> : IDisposable
+        {
+            private readonly List<Delegate> _list;
+            private readonly Action<T> _handler;
+
+            public Unsub(List<Delegate> list, Action<T> handler)
+            {
+                _list = list;
+                _handler = handler;
+            }
+
+            public void Dispose()
+            {
+                _list.Remove(_handler);
+            }
+        }
     }
 }
 
