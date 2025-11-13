@@ -55,6 +55,9 @@ namespace Darkmatter.Core.Services.SceneService
             {
                 return false;
             }
+
+            await _sceneInitiatorsService.InvokeInitiatorLoadEntryPoint(sceneType, enterData, cancellationTokenSource);
+            await _sceneInitiatorsService.InvokeInitiatorStartEntryPoint(sceneType, enterData, cancellationTokenSource);
             return true;
         }
 
