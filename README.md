@@ -1,269 +1,169 @@
-# GameFoundations (Unity)
+# GameFoundations
 
-A modular Unity project with async utilities (UniTask), input bindings, UI/text rendering (TextMesh Pro), and service patterns (Command Factory, Logging).
+> Modular Unity 6 foundation project featuring DI-driven services, async command pattern, and production-ready system scaffolding.
 
-- Unity version: 6000.2.6f2 (see [ProjectSettings/ProjectVersion.txt](ProjectSettings/ProjectVersion.txt))
-- IDE: Visual Studio Code, Unity editor
+GameFoundations provides a curated core for building games that rely on dependency injection (VContainer), the new Input System, Addressables, and UniTask-based asynchronous flows. The included scene, audio, logging, and data services are designed to be extended, keeping gameplay code clean and testable.
 
-## Requirements & Dependencies
+## Quick Start
 
-- Unity: 6000.2.6f2 (Unity 6)
-- Packages:
-  - Input System (com.unity.inputsystem) — required
-  - TextMesh Pro — required (import TMP Essentials on first use)
-  - UniTask — included (embedded under Assets/Darkmatter/Core/Plugins/UniTask)
-    - Optional: install via UPM instead of embedded: com.cysharp.unitask
-  - VContainer — optional (recommended for DI)
-    - Install via Git URL: https://github.com/hadashiA/VContainer.git
-    - Or via OpenUPM: com.hadashiA.vcontainer
-  - Addressables (com.unity.addressables) — optional (recommended for content management)
-    - Install via Package Manager (Unity Registry → “Addressables”)
-    - Opens via Window → Asset Management → Addressables → Groups
-- IDE: Visual Studio Code or Unity editor
-- Notes:
-  - If you switch to UPM UniTask, remove the embedded Assets/Darkmatter/Core/Plugins/UniTask to avoid duplicates.
-  - Enable the Input System in Project Settings when prompted (or set Active Input Handling to Both/New).
-  - Addressables: choose an Editor Play Mode Script in the Addressables Groups window (Use Asset Database for iteration).
+1. **Requirements**
+   - Unity **6000.2.6f2** (Unity 6). See `ProjectSettings/ProjectVersion.txt` for the exact revision.
+   - Recommended IDE: Visual Studio Code or Rider with C# support.
+2. **Clone & Open**
+   - Clone the repository, then add the project in Unity Hub and open it with the required Unity version.
+3. **Install Unity Packages**
+   - *Required*:
+     - Input System (`com.unity.inputsystem`)
+     - TextMesh Pro (Window → TextMeshPro → Import TMP Essential Resources)
+     - VContainer (`https://github.com/hadashiA/VContainer.git` or OpenUPM `com.hadashiA.vcontainer`)
+   - *Included*: UniTask is embedded under `Assets/Darkmatter/Core/Plugins/UniTask`. Use the embedded package or install via UPM (`com.cysharp.unitask`) and remove the embedded folder to avoid duplication.
+   - *Optional*: Addressables (`com.unity.addressables`) for streamed content.
+   - Use the editor menu **Darkmatter → Check Required Packages** to auto-verify and install missing dependencies (`Assets/Darkmatter/Editor/Validators/DarkmatterPackageValidator.cs`).
+4. **Open the Demo Scene**
+   - Load `Assets/Darkmatter/Core/Assets/Scenes/CoreScene.unity`.
+5. **Press Play**
+   - `CoreLifetimeScope` wires up services and boots `CoreInitiator`, which configures inputs, audio, and scene management.
 
-## Project structure
+## Feature Highlights
 
-- Assets/
-  - Darkmatter/Core
-    - Scripts
-      - Extensions
-        - [AnimatorExtensions.cs](Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs)
-      - Services
-        - CommandFactory
-          - [CommandFactory.cs](Assets/Darkmatter/Core/Scripts/Services/CommandFactory/CommandFactory.cs)
-          - [Interfaces/ICommandFactory.cs](Assets/Darkmatter/Core/Scripts/Services/CommandFactory/Interfaces/ICommandFactory.cs)
-        - LoggingService
-          - [DarkmatterLogger.cs](Assets/Darkmatter/Core/Scripts/Services/LoggingService/DarkmatterLogger.cs)
-        - AudioService
-          - Enums
-            - [AudioPlayMode.cs](Assets/Darkmatter/Core/Scripts/Services/AudioService/Enums/AudioPlayMode.cs)
-      - Utils
-        - [EncryptionUtils.cs](Assets/Darkmatter/Core/Scripts/Utils/EncryptionUtils.cs)
-    - Plugins
-      - UniTask
-        - Runtime
-          - [UniTask.cs](Assets/Darkmatter/Core/Plugins/UniTask/Runtime/UniTask.cs)
-          - [Channel.cs](Assets/Darkmatter/Core/Plugins/UniTask/Runtime/Channel.cs)
-      - InputSystem
-        - [GameInputs.cs](Assets/Darkmatter/Core/Plugins/InputSystem/GameInputs.cs)
-      - TextMesh Pro
-        - Shaders, Fonts, Sprites
-        - Fonts license: [LiberationSans - OFL.txt](Assets/Darkmatter/Core/Plugins/TextMesh%20Pro/Fonts/LiberationSans%20-%20OFL.txt)
+- **Dependency Injection with VContainer** – Central lifetime scope (`Assets/Darkmatter/Core/Scripts/Scopes/CoreLifetimeScope.cs`) registers services and entry points.
+- **Async Command Pattern** – `CommandFactory` instantiates commands that resolve dependencies via `IObjectResolver`.
+- **Scene Orchestration** – `SceneLoaderService` works with scene-specific initiators to manage load/start/exit flows asynchronously.
+- **Audio Pipeline** – Channel-based audio playback with scriptable objects for clip catalogs.
+- **Addressables Loader** – Cached Addressables resolution with cancellation support and automatic cleanup.
+- **Data Persistence** – Encrypted `PlayerPrefs` saves for lightweight persistence needs.
+- **Logging Facade** – Centralized `LogService` with timestamped Unity console output.
+- **Ability & State Machine Primitives** – Reusable abstractions for gameplay loops and stateful systems.
+- **Editor Package Validator** – Ensures required UPM dependencies are present on project open.
 
-## Getting started
+## Architecture Overview
 
-1. Open the folder in Unity Hub with Unity 6000.2.6f2.
-2. Packages:
-   - Input System: Window → Package Manager → Unity Registry → “Input System” → Install.
-     - Project Settings → Player → Active Input Handling → “Input System Package (New)” or “Both” → restart editor when prompted.
-   - TextMesh Pro: Window → TextMeshPro → Import TMP Essential Resources.
-   - VContainer (optional for DI): Window → Package Manager → + → Add package from git URL… → https://github.com/hadashiA/VContainer.git
-   - Addressables (optional but recommended): Window → Package Manager → Unity Registry → “Addressables” → Install.
-     - Window → Asset Management → Addressables → Groups → Play Mode Script: “Use Asset Database (fast)” for iteration.
-     - Mark assets as Addressable (Inspector → Addressable checkbox) and assign addresses/labels.
-3. Open the main scene (create or select from Assets).
-4. Enter Play Mode.
+- **Lifetime Scope** (`CoreLifetimeScope`): The single entry point for DI registrations. Services are either `Singleton` (global) or `Scoped`, and Unity components are exposed via `RegisterComponent`.
+- **Entry Point** (`CoreInitiator`): Runs startup logic on `Start()`, enabling inputs, wiring audio catalogs, and seeding scene loader state. All long-running tasks use `CancellationTokenSource.CreateLinkedTokenSource(Application.exitCancellationToken)` to shut down cleanly.
+- **Services Layer** (`Assets/Darkmatter/Core/Scripts/Services`): Houses composable services for audio, scenes, logging, addressables, persistence, commands, initiators, and finite state machines.
+- **Gameplay Utilities**: `Abilities`, `Utils`, and `Extensions` provide reusable building blocks.
 
-Build:
-- File → Build Settings… → select target platform → Build.
-- If using Addressables for content:
-  - Window → Asset Management → Addressables → Groups → Build → New Build → Default Build Script (rebuild when groups change).
-  - For testing bundles in Editor: Play Mode Script → “Use Existing Build (requires built groups)”.
+## Core Systems
 
-## Key components
+### Command Factory
 
-- Animator extensions:
-  - [`AnimatorExtensions`](Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs)
-    - [`AnimatorExtensions.PlayAndWaitAsync`](Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs)
-    - [`AnimatorExtensions.CrossFadeAndWaitAsync`](Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs)
-    - [`AnimatorExtensions.WaitCurrentStateAsync`](Assets/Darkmatter/Core/Scripts/Extensions/AnimatorExtensions.cs)
+`CommandFactory` (see `Assets/Darkmatter/Core/Scripts/Services/CommandFactory`) produces command instances that self-resolve dependencies before execution.
 
-- Command Factory:
-  - [`Darkmatter.Core.Services.CommandFactory.CommandFactory`](Assets/Darkmatter/Core/Scripts/Services/CommandFactory/CommandFactory.cs)
-  - [`Darkmatter.Core.Services.CommandFactory.Interfaces.ICommandFactory`](Assets/Darkmatter/Core/Scripts/Services/CommandFactory/Interfaces/ICommandFactory.cs)
-
-- Input:
-  - [`GameInputs`](Assets/Darkmatter/Core/Plugins/InputSystem/GameInputs.cs)
-
-- Logging:
-  - [`Darkmatter.Core.Services.LoggingService.DarkmatterLogger`](Assets/Darkmatter/Core/Scripts/Services/LoggingService/DarkmatterLogger.cs)
-
-- Utilities:
-  - [`Darkmatter.Core.Utils.EncryptionUtils`](Assets/Darkmatter/Core/Scripts/Utils/EncryptionUtils.cs)
-
-- Async (UniTask):
-  - [`Cysharp.Threading.Tasks.UniTask`](Assets/Darkmatter/Core/Plugins/UniTask/Runtime/UniTask.cs)
-  - [`Cysharp.Threading.Tasks.Channel`](Assets/Darkmatter/Core/Plugins/UniTask/Runtime/Channel.cs)
-
-## Usage examples
-
-Animator async helpers:
 ```csharp
-using UnityEngine;
-using Cysharp.Threading.Tasks;
-
-public class AnimExample : MonoBehaviour
+public sealed class MovePlayerCommand : BaseCommand, ICommandAsync
 {
-    [SerializeField] Animator anim;
-    static readonly int Attack = Animator.StringToHash("Attack");
+    private PlayerController _controller;
 
-    async UniTaskVoid Start()
+    public override void ResolveDependencies()
     {
-        // Play by state hash and await completion
-        await anim.PlayAndWaitAsync(Attack);
+        _controller = ObjectResolver.Resolve<PlayerController>();
+    }
 
-        // Crossfade to state and await completion
-        await anim.CrossFadeAndWaitAsync(Attack, transitionDuration: 0.2f);
+    public async UniTask Execute(CancellationTokenSource cts)
+    {
+        await _controller.MoveAsync(cts.Token);
+    }
+}
 
-        // Await current state's completion
-        await anim.WaitCurrentStateAsync();
+// Usage
+var command = commandFactory.CreateCommandAsync<MovePlayerCommand>();
+await command.Execute(cts);
+```
+
+- `BaseCommand` stores the injected `IObjectResolver`.
+- Implement one of `ICommandVoid`, `ICommandWithResult<T>`, `ICommandAsync`, or `ICommandAsyncWithResult<T>`.
+- `ResolveDependencies()` should pull all collaborators from the resolver; avoid heavy logic in constructors.
+
+### Scene Loading & Initiators
+
+- `SceneLoaderService` provides additive scene loading with duplication guards and cancellation support.
+- Scenes are keyed by the `SceneType` enum and must match the actual scene asset names.
+- Implement `ISceneInitiator` per scene to run load/start/exit entry points.
+- Register/unregister initiators with `SceneInitiatorsService`, and pass view models via `IInitiatorEnterData`.
+
+```csharp
+public sealed class GameplayInitiator : MonoBehaviour, ISceneInitiator
+{
+    public SceneType SceneType => SceneType.GamePlay;
+
+    public void Initialize() { /* VContainer initialization */ }
+
+    public async Awaitable LoadEntryPoint(IInitiatorEnterData enterData, CancellationTokenSource cts)
+    {
+        // Warm up assets, addressables, etc.
+        await UniTask.CompletedTask;
     }
 }
 ```
 
-Command Factory (DI via VContainer):
-```csharp
-using VContainer;
-using Darkmatter.Core.Services.CommandFactory;
-using Darkmatter.Core.Services.CommandFactory.Interfaces;
+### Audio Service
 
-public class Bootstrap
-{
-    readonly IObjectResolver resolver;
+- `AudioService` maps audio clips to named channels (`Music`, `SFX`, `Voice`, `Ambient`, `Master`).
+- Populate `CoreAudioClipsSO` (inherits from `AudioClipsSO`) with `AudioData` entries.
+- Call `AddAudioClipsSO` during bootstrap (`CoreInitiator` already adds the default catalog).
+- Adjust volume per channel via `SetSoundVolume`. Use `PlayAudioAsync` when you need to wait for completion.
 
-    public Bootstrap(IObjectResolver resolver)
-    {
-        this.resolver = resolver;
-    }
+### Addressables Loader
 
-    public void CreateCommands()
-    {
-        var factory = new Darkmatter.Core.Services.CommandFactory.CommandFactory(resolver);
-        // Examples (define your command types implementing the respective interfaces):
-        // var cmd = factory.CreateCommandVoid<MyCommand>();
-        // var asyncCmd = factory.CreateCommandAsync<MyAsyncCommand>();
-    }
-}
+- `AddressablesLoaderService` caches `AsyncOperationHandle` instances by address.
+- `LoadAsync<T>` enforces cancellation tokens and handles component extraction when loading prefabs.
+- Call `Release(address)` for targeted cleanup or `ReleaseAll()` on shutdown.
+
+### Data Persistence
+
+- `PlayerPrefsPresistanceService` (note the intentional encryption layer) serializes any `Serializable` object to JSON, encrypts it via `EncryptionUtils`, and stores it in `PlayerPrefs`.
+- Use `LoadData<T>` with a default fallback to keep deserialization safe.
+
+### Logging
+
+- `DarkmatterLogger` extends `LoggerBase` and injects itself into `LogService`.
+- Call `LogService.LogTopic("message")` for automatic `[Class.Method]` prefixes and timestamps.
+
+### Gameplay Helpers
+
+- `BaseAbilitySystem` tracks a collection of `IAbility` instances, calling `Tick()` only on active abilities.
+- `BaseStateMachine` provides push/pop/replace semantics for `IState` implementations.
+- `AnimatorExtensions` expose `UniTask` helpers such as `PlayAndWaitAsync` and `CrossFadeAndWaitAsync`.
+- `InputUtils.IsPointerOverUI()` abstracts current input backend (supports both legacy and new Input System).
+
+## Folder Structure
+
+```
+Assets/Darkmatter/Core/
+  Assets/         # Shared scenes, audio mixer, scriptable objects
+  Plugins/        # Embedded third-party packages (UniTask, InputSystem bindings, TMP assets)
+  Scripts/
+    Abilities/    # Ability system interfaces and base classes
+    Audio/        # Audio scriptable objects
+    Extensions/   # Animator/String extensions
+    Initiators/   # Project entry point (CoreInitiator)
+    Scopes/       # VContainer lifetime scope definitions
+    Services/     # Command, audio, logging, scene, addressables, persistence, etc.
+    Utils/        # Encryption and input helpers
+Editor/           # Package validator tooling
 ```
 
-Input actions:
-- Use [`GameInputs`](Assets/Darkmatter/Core/Plugins/InputSystem/GameInputs.cs) to wire player/UI actions generated by the Input System.
+## Building
 
-Logging:
-- Use [`Darkmatter.Core.Services.LoggingService.DarkmatterLogger`](Assets/Darkmatter/Core/Scripts/Services/LoggingService/DarkmatterLogger.cs) for timestamped logs.
+1. Open **File → Build Settings…** and add the desired scenes.
+2. If using Addressables, open **Window → Asset Management → Addressables → Groups** and `Build → New Build → Default Build Script`.
+3. Choose the target platform and click **Build**. Rebuild Addressables whenever content changes.
 
-Audio:
-- Playback mode enum: [`Darkmatter.Core.Services.AudioService.AudioPlayMode`](Assets/Darkmatter/Core/Scripts/Services/AudioService/Enums/AudioPlayMode.cs).
+## Documentation
 
-## UniTask details
+Additional guides live under `docs/wiki`. Suggested GitHub Wiki structure:
 
-- Location: Assets/Darkmatter/Core/Plugins/UniTask (embedded).
-- Usage:
-  - using Cysharp.Threading.Tasks;
-  - Prefer UniTask/UniTaskVoid over Task in gameplay code for performance.
-- If you prefer UPM:
-  1) Delete Assets/Darkmatter/Core/Plugins/UniTask
-  2) Install com.cysharp.unitask from Package Manager (or Git URL https://github.com/Cysharp/UniTask.git)
-- Common patterns:
-  - Use async UniTask methods for gameplay flows.
-  - Use CancellationToken (e.g., this.GetCancellationTokenOnDestroy()) to cancel on object destruction.
+- [Home](docs/wiki/Home.md) – quick start, architecture links.
+- [Command Pattern](docs/wiki/Command-Pattern.md) – command factory walkthrough.
+- [Core Services](docs/wiki/Core-Services.md) – audio, scene, addressables, persistence, logging.
+- [Gameplay Framework](docs/wiki/Gameplay-Framework.md) – abilities, state machines, initiators, utilities.
 
-## VContainer details (optional)
+## Contributing
 
-- Install via Git URL (recommended): https://github.com/hadashiA/VContainer.git
-- Basic registration:
-  ```csharp
-  using VContainer;
-  using VContainer.Unity;
-  using Darkmatter.Core.Services.CommandFactory;
+- Follow Unity C# conventions and keep services decoupled from MonoBehaviours when possible.
+- Prefer injecting dependencies via VContainer over direct `FindObjectOfType` calls.
+- Validate new packages with the editor validator or update `Assets/Darkmatter/Editor/Validators/package.json`.
 
-  public class AppScope : LifetimeScope
-  {
-      protected override void Configure(IContainerBuilder builder)
-      {
-          // Register services
-          builder.Register<Darkmatter.Core.Services.LoggingService.DarkmatterLogger>(Lifetime.Singleton);
-          builder.Register<CommandFactory>(Lifetime.Singleton);
-          // ...register your commands and other services...
-      }
-  }
-  ```
-- Resolving:
-  - Inject IObjectResolver into entry points (MonoBehaviours via LifetimeScope) or constructor-injected classes.
-  - CommandFactory expects an IObjectResolver; VContainer provides this automatically when resolved/constructed.
+## License
 
-## Addressables details (optional)
-
-- Install: Package Manager → Addressables. Open Groups window (Window → Asset Management → Addressables → Groups).
-- Setup:
-  - Mark assets Addressable via Inspector or right-click in Project → Addressables → “Make Addressable”.
-  - Use labels for bulk load (e.g., “ui”, “environment”).
-  - Profiles: switch Build/Load paths per target (Groups window → Profiles). Default local paths are fine for most use.
-  - Editor iteration: Play Mode Script → “Use Asset Database (fast)”; bundle testing: “Use Existing Build”.
-- Build for content:
-  - Groups window → Build → New Build → Default Build Script.
-  - Rebuild groups after adding/removing Addressable assets or changing groups/labels.
-- Usage examples (with UniTask):
-  ```csharp
-  using UnityEngine;
-  using UnityEngine.AddressableAssets;
-  using UnityEngine.ResourceManagement.AsyncOperations;
-  using Cysharp.Threading.Tasks;
-
-  // Load a prefab by address and instantiate
-  public static class AddressablesExamples
-  {
-      public static async UniTask<GameObject> LoadPrefabAsync(string address)
-      {
-          var handle = Addressables.LoadAssetAsync<GameObject>(address);
-          GameObject prefab = await UniTask.FromTask(handle.Task);
-          return prefab; // Remember to Addressables.Release(handle) when prefab no longer needed
-      }
-
-      public static async UniTask<GameObject> InstantiateAsync(string address, Vector3 pos, Quaternion rot, Transform parent = null)
-      {
-          var instHandle = Addressables.InstantiateAsync(address, pos, rot, parent);
-          var instance = await UniTask.FromTask(instHandle.Task);
-          return instance; // Later: Addressables.ReleaseInstance(instance);
-      }
-
-      public static async UniTask PreloadByLabelAsync(string label)
-      {
-          var loadHandle = Addressables.LoadAssetsAsync<Object>(label, _ => { /* optional per-asset callback */ });
-          await UniTask.FromTask(loadHandle.Task);
-          // Keep handle or track assets if you need to release later: Addressables.Release(loadHandle);
-      }
-
-      public static void ReleaseAssetHandle<T>(AsyncOperationHandle<T> handle)
-      {
-          if (handle.IsValid()) Addressables.Release(handle);
-      }
-
-      public static void ReleaseInstance(GameObject instance)
-      {
-          if (instance != null) Addressables.ReleaseInstance(instance);
-      }
-  }
-  ```
-- Tips:
-  - Keep and release the specific handles you created (asset handles vs instance handles).
-  - Avoid mixing Resources and Addressables for the same asset.
-  - For remote content, configure Build/Load paths in Profiles and host built bundles (ServerData).
-
-## Input System setup
-
-- Generate input actions with the Input System (see Assets/Darkmatter/Core/Plugins/InputSystem/GameInputs.cs).
-- Ensure Project Settings → Player → Active Input Handling includes the Input System.
-- Bind actions in your components by creating and enabling a GameInputs instance or through PlayerInput.
-
-## Notes
-
-- This project includes third-party assets:
-  - UniTask by Cysharp (embedded under Assets/Darkmatter/Core/Plugins/UniTask)
-  - Unity Input System generated bindings
-  - TextMesh Pro shaders and fonts (see included licenses)
-  - Addressables by Unity (package com.unity.addressables)
+This repository currently does not include a license file. Add one before distributing builds or source publicly.

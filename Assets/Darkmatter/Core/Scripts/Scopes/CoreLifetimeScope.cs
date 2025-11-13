@@ -6,6 +6,8 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Darkmatter.Core.Services.LoggingService;
+using Darkmatter.Core.Services.API;
+using Darkmatter.Core.Events;
 
 namespace Darkmatter.Core.Scopes
 {
@@ -20,6 +22,8 @@ namespace Darkmatter.Core.Scopes
             builder.Register<GameInputs>(Lifetime.Singleton).AsSelf();
             builder.Register<ISceneLoaderService, SceneLoaderService>(Lifetime.Singleton);
             builder.Register<ISceneInitiatorsService, SceneInitiatorsService>(Lifetime.Singleton);
+            builder.Register<IApiService, ApiService>(Lifetime.Singleton);
+            builder.Register<IEventBus, EventBus>(Lifetime.Singleton);
             builder.RegisterEntryPoint<CoreInitiator>();
         }
     }
