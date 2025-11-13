@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace Darkmatter.Core.Services.InitiatorService.Scenes
 {
-    public interface ISceneInitiator : IInitializable
+    public interface ISceneInitiator
     {
         SceneType SceneType { get; }
         Awaitable LoadEntryPoint(IInitiatorEnterData enterDataObject, CancellationTokenSource cancellationTokenSource);
