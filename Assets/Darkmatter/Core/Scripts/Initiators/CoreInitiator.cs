@@ -7,10 +7,11 @@ using Darkmatter.Core.Services.LoggingService;
 using Darkmatter.Core.Services.SceneService;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Darkmatter.Core.Initiators
 {
-    public class CoreInitiator : MonoBehaviour
+    public class CoreInitiator : IStartable
     {
         private GameInputs _gameInputs;
         private ISceneLoaderService _sceneLoaderService;
@@ -26,7 +27,7 @@ namespace Darkmatter.Core.Initiators
             _coreAudioClipsScriptableObject = coreAudioClipsScriptableObject;
         }
 
-        private void Start()
+        public void Start()
         {
             _ = InitEntryPoint(CancellationTokenSource.CreateLinkedTokenSource(Application.exitCancellationToken));
         }
