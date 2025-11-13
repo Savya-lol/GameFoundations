@@ -8,8 +8,6 @@ namespace Darkmatter.Core.Services.InitiatorService.Scenes
     {
         void RegisterInitiator(ISceneInitiator sceneInitiator);
         void UnregisterInitiator(ISceneInitiator sceneInitiator);
-        UniTask InvokeInitiatorLoadEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource);
-        UniTask InvokeInitiatorStartEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource);
         UniTask InvokeInitiatorExitPoint(SceneType sceneType, CancellationTokenSource cancellationTokenSource);
     }
 }

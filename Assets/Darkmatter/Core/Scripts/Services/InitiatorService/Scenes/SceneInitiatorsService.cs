@@ -19,16 +19,6 @@ namespace Darkmatter.Core.Services.InitiatorService.Scenes
             _sceneInitiators.Remove(sceneInitiator.SceneType);
         }
 
-        public async UniTask InvokeInitiatorLoadEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource)
-        {
-            await _sceneInitiators[sceneType].LoadEntryPoint(enterData, cancellationTokenSource);
-        }
-
-        public async UniTask InvokeInitiatorStartEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource)
-        {
-            await _sceneInitiators[sceneType].StartEntryPoint(enterData, cancellationTokenSource);
-        }
-
         public async UniTask InvokeInitiatorExitPoint(SceneType sceneType, CancellationTokenSource cancellationTokenSource)
         {
             await _sceneInitiators[sceneType].InitExitPoint(cancellationTokenSource);
