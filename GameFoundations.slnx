@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Project Path="UniTask.Editor.csproj" />
+  <Project Path="UniTask.Linq.csproj" />
+  <Project Path="UniTask.csproj" />
+  <Project Path="CoreAssembly.csproj" />
+  <Project Path="UniTask.TextMeshPro.csproj" />
+  <Project Path="UniTask.Addressables.csproj" />
+  <Project Path="UniTask.DOTween.csproj" />
+  <Project Path="CorePluginsAssembly.csproj" />
+  <Project Path="DarkmatterEditorAssembly.csproj" />
+</Solution>
